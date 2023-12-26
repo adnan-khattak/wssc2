@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { FIREBASE_AUTH } from '../../Firebase';
 
+
 import { signInWithEmailAndPassword } from 'firebase/auth';
-const Signin = () => {
+const Signin = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -13,6 +14,8 @@ const Signin = () => {
         console.log('Signed in Successfully');
         const user = userCredential.user;
         console.log(user);
+        navigation.navigate('Complaints');
+
       })
       .catch(error => {
         const errorCode = error.code;
@@ -46,7 +49,8 @@ const Signin = () => {
 
       <TouchableOpacity style={styles.button} onPress={handleSignin}>
         <Text style={styles.buttonText}>Sign In</Text>
-      </TouchableOpacity>
+        {/* // adnan530@gmail.com addi3214 & adnan0@gmail.com kamranbhai addi12@gmail.com 12345612*/}
+      </TouchableOpacity> 
     </View>
   );
 };

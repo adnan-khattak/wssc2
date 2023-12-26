@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { FIREBASE_AUTH } from '../../Firebase';
 
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-const SignUp = () => {
+const SignUp = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -13,6 +13,7 @@ const SignUp = () => {
         console.log('Signed Up Successfully');
         const user = userCredential.user;
         console.log(user);
+        navigation.navigate('signin');
       })
       .catch(error => {
         const errorCode = error.code;
@@ -46,7 +47,8 @@ const SignUp = () => {
 
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
+        {/* //adnan530@gmail.com addi3214 & adnan0@gmail.com kamranbhai */}
+      </TouchableOpacity> 
     </View>
   );
 };
