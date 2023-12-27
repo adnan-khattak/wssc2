@@ -14,7 +14,7 @@ const Signin = ({navigation}) => {
         console.log('Signed in Successfully');
         const user = userCredential.user;
         console.log(user);
-        navigation.navigate('Complaints');
+        navigation.navigate('home');
 
       })
       .catch(error => {

@@ -1,19 +1,26 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import React from 'react';
+import React,{useState} from 'react';
+import ComplaintScreen from './component/PendingComplaint';
+import RecievedComplaint from './component/RecievedComplaint';
+import PendingComplaint from './component/PendingComplaint';
 
-const ComplaintType = () => {
+const ComplaintType = ({navigation}) => {
+  const [selectedComplaintType, setSelectedComplaintType] = useState('complaint');
+  const handleButtonPress = (complaintType) => {
+    setSelectedComplaintType(complaintType);
+  };
   return (
     <View>
       <View style={styles.container}>
         {/* Text: Pending Complaint */}
-        <TouchableOpacity onPress={() => console.log('Pending Complaint clicked')}>
+        <TouchableOpacity onPress={() => handleButtonPress('complaint')}>
           <Text style={styles.text}>Pending Complaint</Text>
         </TouchableOpacity>
 
         <View style={styles.divider} />
-
+       
         {/* Clickable: Received Complaint */}
-        <TouchableOpacity onPress={() => console.log('Received Complaint clicked')}>
+        <TouchableOpacity onPress={() => handleButtonPress('received')}>
           <Text style={styles.text}>Received Complaint</Text>
         </TouchableOpacity>
 
@@ -24,6 +31,8 @@ const ComplaintType = () => {
       </View>
 
       <Text style={styles.footerText}>Please Choose The Complaint Type</Text>
+      {selectedComplaintType === 'complaint' && <PendingComplaint />}
+      {selectedComplaintType === 'received' && <RecievedComplaint />}
     </View>
   );
 };
