@@ -1,13 +1,13 @@
 import React from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
-import ComplaintBox from '../complaints/ComplaintBox'; // Adjust the path based on your project structure
-import Navbar from '../navbar/Navbar';
-import ComplaintType from '../complaints/ComplaintType';
-import ClosedComplaint from '../complaints/ClosedComplaint';
+import ComplaintBox from './ComplaintBox'; // Adjust the path based on your project structure
+import Navbar from '../../navbar/Navbar';
+import ComplaintType from '../ComplaintType';
+import ClosedComplaint from './ClosedComplaint';
 
-const ComplaintScreen = () => {
+const PendingComplaint = () => {
   const complaintDataArray = [
-    { imageSource: require('../../assets/images/leaves.jpg'), complaintName: 'Complaint 1', otherInfo: 'Information of ' },
+    { imageSource: require('../../../assets/images/leaves.jpg'), complaintName: 'Complaint 1', otherInfo: 'Information of ' },
     // { imageSource: require('../../assets/images/leaves.jpg'), complaintName: 'Complaint 1', otherInfo: 'Information of' },
     // { imageSource: require('../../assets/images/leaves.jpg'), complaintName: 'Complaint 1', otherInfo: 'Information of' },
     // { imageSource: require('../../assets/images/leaves.jpg'), complaintName: 'Complaint 1', otherInfo: 'Information of' },
@@ -16,8 +16,8 @@ const ComplaintScreen = () => {
 
   return (
     <ScrollView>
-        <Navbar />
-        <ComplaintType />
+        {/* <Navbar /> */}
+        {/* <ComplaintType /> */}
       <View style={styles.container}>
         {complaintDataArray.map((ComplaintData, index) => (
           <ComplaintBox key={index} ComplaintData={ComplaintData} />
@@ -34,4 +34,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ComplaintScreen;
+export default PendingComplaint;
