@@ -4,11 +4,13 @@ import ComplaintBox from '../complaints/ComplaintBox'; // Adjust the path based 
 import Navbar from '../navbar/Navbar';
 import ComplaintType from '../complaints/ComplaintType';
 import ClosedComplaint from '../complaints/ClosedComplaint';
+import InProgressComplaint from '../complaints/InProgressComplaint';
+import InitiatedComplaint from '../complaints/InitiatedComplaint';
 
-const ComplaintScreen = () => {
+const RecievedComplaint = () => {
   const complaintDataArray = [
-    { imageSource: require('../../assets/images/leaves.jpg'), complaintName: 'Complaint 1', otherInfo: 'Information of ' },
-    // { imageSource: require('../../assets/images/leaves.jpg'), complaintName: 'Complaint 1', otherInfo: 'Information of' },
+    { imageSource: require('../../assets/images/leaves.jpg'), complaintName: 'Complaint 1', otherInfo: 'Information of dummy text how about you now how are you ' },
+    { imageSource: require('../../assets/images/leaves.jpg'), complaintName: 'Complaint 1', otherInfo: 'Information of' },
     // { imageSource: require('../../assets/images/leaves.jpg'), complaintName: 'Complaint 1', otherInfo: 'Information of' },
     // { imageSource: require('../../assets/images/leaves.jpg'), complaintName: 'Complaint 1', otherInfo: 'Information of' },
     // ... more data
@@ -17,10 +19,13 @@ const ComplaintScreen = () => {
   return (
     <ScrollView>
         <Navbar />
-        <ComplaintType />
+        <ComplaintType navigation={navigation} />
       <View style={styles.container}>
         {complaintDataArray.map((ComplaintData, index) => (
-          <ComplaintBox key={index} ComplaintData={ComplaintData} />
+        //   <ComplaintBox key={index} ComplaintData={ComplaintData} />
+        //   <ClosedComplaint key={index} ComplaintData={ComplaintData}/>
+        // <InProgressComplaint key={index} ComplaintData={ComplaintData}/>
+        <InitiatedComplaint key={index} ComplaintData={ComplaintData} />
         ))}
       </View>
     </ScrollView>
@@ -34,4 +39,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ComplaintScreen;
+export default RecievedComplaint;

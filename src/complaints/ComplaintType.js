@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import React from 'react';
 
-const ComplaintType = () => {
+const ComplaintType = ({navigation}) => {
   return (
     <View>
       <View style={styles.container}>
@@ -13,7 +13,7 @@ const ComplaintType = () => {
         <View style={styles.divider} />
 
         {/* Clickable: Received Complaint */}
-        <TouchableOpacity onPress={() => console.log('Received Complaint clicked')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Recieved')}>
           <Text style={styles.text}>Received Complaint</Text>
         </TouchableOpacity>
 
