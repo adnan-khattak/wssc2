@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { FIREBASE_AUTH } from '../../Firebase';
+import { user } from '../../style/styles';
 
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 const SignUp = ({navigation}) => {
@@ -25,11 +26,11 @@ const SignUp = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
+    <View style={user.container}>
+      <Text style={user.title}>Sign Up</Text>
 
       <TextInput
-        style={styles.input}
+        style={user.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
@@ -38,51 +39,20 @@ const SignUp = ({navigation}) => {
       />
 
       <TextInput
-        style={styles.input}
+        style={user.input}
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+      <TouchableOpacity style={user.button} onPress={handleSignUp}>
+        <Text style={user.buttonText}>Sign Up</Text>
         {/* //adnan530@gmail.com addi3214 & adnan0@gmail.com kamranbhai */}
       </TouchableOpacity> 
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-  },
-  input: {
-    width: '100%',
-    borderWidth: 1,
-    borderColor: 'gray',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-  },
-  button: {
-    backgroundColor: 'blue',
-    padding: 15,
-    borderRadius: 5,
-    width: '100%',
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-});
 
 export default SignUp;
