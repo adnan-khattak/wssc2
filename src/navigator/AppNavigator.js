@@ -8,12 +8,13 @@ import InProgressComplaint from '../complaints/component/InProgressComplaint';
 import HomeScreen from '../screens/HomeScreen';
 import SingleComplaint from '../complaints/component/SingleComplaint';
 import ComplaintTracking from '../complaints/ComplaintTracking';
+import Welcome from '../screens/Welcome';
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName='signin'>
+    <Stack.Navigator initialRouteName='signup'>
       <Stack.Screen name="signin" component={Signin} options={{headerShown:false}}/>
       <Stack.Screen name='signup' component={SignUp} options={{headerShown:false}}/>
       <Stack.Screen name='home' component={HomeScreen} options={{headerShown:false}} />
@@ -21,6 +22,7 @@ const AppNavigator = () => {
       <Stack.Screen name='complaint' component={ComplaintScreen} options={{headerShown:false}} />
       <Stack.Screen name='single' component={SingleComplaint} options={{headerShown:false}} />
       {/* <Stack.Screen name='tracking' component={ComplaintTracking} /> */}
+      <Stack.Screen name='welcome' component={Welcome} options={{headerShown:false}} />
     </Stack.Navigator>
   );
 };

@@ -1,4 +1,33 @@
 import { StyleSheet } from "react-native";
+// for Welcome Page
+export const welcome = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  backgroundImage: {
+    ...StyleSheet.absoluteFillObject,
+    width: '100%',
+    height: '100%',
+  },
+  contentContainer: {
+    alignItems: 'center',
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
+  },
+  appName: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+  },
+});
+
+
 // for Signin + signup
 export const user = StyleSheet.create({
     container: {
@@ -18,17 +47,37 @@ export const user = StyleSheet.create({
       padding: 10,
       borderRadius: 5,
       marginBottom: 10,
-    },
+    },passwordContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '100%',
+      marginBottom: 15,
+    },  
+    iconContainer: {
+      position: 'absolute',
+      right: 10,
+    }, 
     button: {
       backgroundColor: 'blue',
-      padding: 15,
+      paddingVertical: 10,
+      paddingHorizontal: 20,
       borderRadius: 5,
-      width: '100%',
-      alignItems: 'center',
+      marginBottom: 15,
     },
-    buttonText: {
+    ButtonText: {
       color: 'white',
-      fontWeight: 'bold',
+      fontSize: 16,
+      textAlign: 'center',
+    },
+     
+    signUpLink: {
+      color: 'black',
+      fontSize: 16,
+      textAlign: 'center',
+    },
+    clickHere: {
+      color: 'blue',
+      textDecorationLine: 'underline',
     },
   });
   
