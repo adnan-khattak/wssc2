@@ -5,8 +5,7 @@ import { user } from '../../style/styles';
 
 
 const Signin = ({navigation}) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [password, setPassword] = useState('');
+
   const [showPassword, setShowPassword] = useState(false);
 
 
@@ -22,6 +21,7 @@ const Signin = ({navigation}) => {
     },
   })
   const onSubmit = (data) => {
+    
     console.log('Form Data:', data);
     setPending(true);
     setTimeout(() => {
@@ -29,11 +29,7 @@ const Signin = ({navigation}) => {
     // navigation.navigate('signin');
     }, 3000); 
   }
-  const handleSignIn = () => {
-    // Add your sign-in logic here
-    console.log('Sign In:', { phoneNumber, password });
-  };
-
+ 
   return (
     <ScrollView contentContainerStyle={user.container}>
       <View style={user.innerContainer}>

@@ -18,10 +18,6 @@ const AppNavigator = () => {
       <Stack.Screen name="signin" component={Signin} options={{headerShown:false}}/>
       <Stack.Screen name='signup' component={SignUp} options={{headerShown:false}}/>
       <Stack.Screen name='home' component={HomeScreen} options={{headerShown:false}} />
-      <Stack.Screen name='Recieved' component={RecievedComplaint} options={{headerShown:false}} />
-      <Stack.Screen name='complaint' component={ComplaintScreen} options={{headerShown:false}} />
-      <Stack.Screen name='single' component={SingleComplaint} options={{headerShown:false}} />
-      {/* <Stack.Screen name='tracking' component={ComplaintTracking} /> */}
       <Stack.Screen name='welcome' component={Welcome} options={{headerShown:false}} />
     </Stack.Navigator>
   );

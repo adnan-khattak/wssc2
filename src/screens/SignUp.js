@@ -11,7 +11,7 @@ import {useForm, Controller} from 'react-hook-form';
 import {user, welcome} from '../../style/styles';
 
 const SignUp = ({navigation}) => {
-  const [pending, setPending] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     control,
@@ -30,9 +30,9 @@ const SignUp = ({navigation}) => {
 
   const onSubmit = data => {
     console.log('Form Data:', data);
-    setPending(true);
+    setLoading(true);
     setTimeout(() => {
-      setPending(false);
+      setLoading(false);
       navigation.navigate('signin');
     }, 3000);
   };
@@ -151,7 +151,8 @@ const SignUp = ({navigation}) => {
               )}
               name="confirmPassword"
             />
-            {errors.confirmPassword && ( <Text>{errors.confirmPassword.message}</Text>
+            {errors.confirmPassword && (
+              <Text>{errors.confirmPassword.message}</Text>
             )}
 
             {/* <TouchableOpacity onPress={() => setConfirmPassword(!confirmPassword)} style={user.iconContainer}>
@@ -161,9 +162,9 @@ const SignUp = ({navigation}) => {
           <TouchableOpacity
             style={user.submitButton}
             onPress={handleSubmit(onSubmit)}
-            disabled={pending}>
+            disabled={loading}>
             <Text style={user.buttonText}>
-              {!pending ? 'SIGN UP | سائن اپ' : 'Signing Up...'}
+              {!loading ? 'SIGN UP | سائن اپ' : 'Signing Up...'}
             </Text>
           </TouchableOpacity>
         </View>
