@@ -30,24 +30,57 @@ export const welcome = StyleSheet.create({
 
 // for Signin + signup
 export const user = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 20,
-    },
+  container: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  innerContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '85%',
+  },logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  logo: {
+    width: 44,
+    height: 44,
+  },
     title: {
-      fontSize: 24,
-      marginBottom: 20,
+      marginLeft: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
+    titleText: {
+      fontSize: 14,
+      color: '#718096',
+      fontWeight: '600',
+      textAlign: 'center',
+    },
+    form: {
+          width: '100%',
+        },
+    formInput: {
+          position: 'relative',
+          marginTop: 10,
+          marginBottom: 15,
+        },
     input: {
-      width: '100%',
-      borderWidth: 1,
-      borderColor: 'gray',
-      padding: 10,
-      borderRadius: 5,
-      marginBottom: 10,
-    },passwordContainer: {
+          paddingVertical: 10,
+          paddingHorizontal: 0,
+          fontSize: 16,
+          color: '#000',
+          borderBottomWidth: 2,
+          borderBottomColor: '#cbd5e0',
+          width: '100%',
+        },
+
+    passwordContainer: {
       flexDirection: 'row',
       alignItems: 'center',
       width: '100%',
@@ -57,26 +90,31 @@ export const user = StyleSheet.create({
       position: 'absolute',
       right: 10,
     }, 
-    button: {
-      backgroundColor: 'blue',
-      paddingVertical: 10,
-      paddingHorizontal: 20,
+    submitButton: {
+      width: '100%',
+      backgroundColor: '#4299e1',
       borderRadius: 5,
-      marginBottom: 15,
+      paddingVertical: 15,
+      marginTop: 20,
+      alignItems: 'center',
     },
-    ButtonText: {
-      color: 'white',
+    buttonText: {
       fontSize: 16,
-      textAlign: 'center',
+      color: '#fff',
+      fontWeight: '600',
     },
      
-    signUpLink: {
-      color: 'black',
-      fontSize: 16,
+    additionalText: {
+      marginTop: 20,
+      alignItems: 'center',
+    },
+    additionalTextText: {
+      fontSize: 14,
+      color: '#4a5568',
       textAlign: 'center',
     },
-    clickHere: {
-      color: 'blue',
+    clickableText: {
+      color: '#4299e1',
       textDecorationLine: 'underline',
     },
   });

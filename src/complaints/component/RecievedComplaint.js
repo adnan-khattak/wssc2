@@ -31,6 +31,7 @@ const RecievedComplaint = ({navigation}) => {
         // <InitiatedComplaint key={index} ComplaintData={ComplaintData} />
         <SingleComplaint key={index} ComplaintData={ComplaintData} />
         // <PendingComplaint key={index} ComplaintData={ComplaintData} />
+      
         ))}
       </View>
     </ScrollView>
