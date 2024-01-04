@@ -5,8 +5,8 @@ import { user } from '../../style/styles';
 
 
 const Signin = ({navigation}) => {
-
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
 
   const {
@@ -16,20 +16,47 @@ const Signin = ({navigation}) => {
     watch,
   } = useForm({
     defaultValues: {
-      phoneNumber: "",
+      phone: "",
       password: "",
     },
   })
-  const onSubmit = (data) => {
-    
+  const onSubmit = (data) => {       
+ const url =
+ 'http://localhost:7000/api/v1/auth/signin'; // Replace with your API endpoint
+const options = {
+ method: 'POST',
+ headers: {
+   'Content-Type': 'application/json', // Set the content type according to your API requirements
+   // Add any other headers if needed
+ },
+ body: JSON.stringify(data),
+};
+
     console.log('Form Data:', data);
-    setPending(true);
+    setLoading(true);
+    fetch(url, options)
+      .then(response => {
+        console.log(response);
+        console.log(response);
+        if (!response.ok) {
+          console.log(response.status);
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parse the JSON from the response
+      })
+      .then(result => {
+        // Handle the result of the request
+        console.log('POST request succeeded with JSON response:', result);
+      })
+      .catch(error => {
+        // Handle errors during the request
+        console.error('There was a problem with the POST request:', error);
+      });
     setTimeout(() => {
-    setPending(false);
+    setLoading(false);
     // navigation.navigate('signin');
     }, 3000); 
   }
- 
   return (
     <ScrollView contentContainerStyle={user.container}>
       <View style={user.innerContainer}>
@@ -61,9 +88,9 @@ const Signin = ({navigation}) => {
         value={value}
       />
       )}
-      name="phoneNumber"
+      name="phone"
     />
-    {errors.phoneNumber && <Text>{errors.phoneNumber.message}</Text>}
+    {errors.phone && <Text>{errors.phone.message}</Text>}
     </View>
     
 
@@ -73,7 +100,7 @@ const Signin = ({navigation}) => {
         rules={{
           required: "Password is required",
           minLength: {
-            value: 8,
+            value: 6,
             message: "Password must be at least 8 characters long",
           },
         }}

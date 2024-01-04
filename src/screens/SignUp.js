@@ -7,30 +7,73 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
+import {Dropdown} from 'react-native-element-dropdown';
 import {useForm, Controller} from 'react-hook-form';
 import {user, welcome} from '../../style/styles';
 
 const SignUp = ({navigation}) => {
   const [loading, setLoading] = useState(false);
+  const [value, setValue] = useState(null);
 
   const {
     control,
     handleSubmit,
     formState: {errors},
+    reset,
     watch,
   } = useForm({
     defaultValues: {
-      userName: '',
-      phoneNumber: '',
+      name: '',
+      phone: '',
+      WSSC_CODE: '',
       password: '',
-      confirmPassword: '',
     },
   });
   const password1 = watch('password', '');
 
+  const resdata = [
+    { value: 'wsscp25001', label: 'Peshawer'},
+    { value: 'wssca22020', label: 'Abbottabad'},
+    { value: 'wsscs19200', label: 'Swat'},
+    { value: 'wssck026010', label: 'Kohat'},
+    { value: 'wsscm23200', label: 'Mardan'},
+    { value: 'wsscabannu', label: 'Bannu'},
+  ];
+
   const onSubmit = data => {
-    console.log('Form Data:', data);
+    delete data.confirmPassword;
+    const formData = { ...data, WSSC_CODE: value };
+    
+ const url ='https://fyp-backend-production-27a1.up.railway.app/api/v1/auth/signup'; // Replace with your API endpoint
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Set the content type according to your API requirements
+        // Add any other headers if needed
+      },
+      body: JSON.stringify(formData),
+    };
+    console.log('Form Data:', formData);
+    
     setLoading(true);
+    fetch(url, options)
+      .then(response => {
+        console.log(response);
+        if (!response.ok) {
+          console.log(response.status);
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parse the JSON from the response
+      })
+      .then(result => {
+        // Handle the result of the request
+        console.log('POST request succeeded with JSON response:', result);
+      })
+      .catch(error => {
+        // Handle errors during the request
+        console.error('There was a problem with the POST request:', error);
+      });
+    reset();
     setTimeout(() => {
       setLoading(false);
       navigation.navigate('signin');
@@ -39,7 +82,7 @@ const SignUp = ({navigation}) => {
 
   // const handleSignUp = () => {
   //   // Handle the sign-up logic here
-  //   console.log('Signing up with:',name,  phoneNumber, password);
+  //   console.log('Signing up with:',name,   phone, password);
   // };
 
   return (
@@ -70,9 +113,9 @@ const SignUp = ({navigation}) => {
                   value={value}
                 />
               )}
-              name="userName"
+              name="name"
             />
-            {errors.userName && <Text>This is required.</Text>}
+            {errors.name && <Text>This is required.</Text>}
           </View>
 
           <View style={user.formInput}>
@@ -90,15 +133,15 @@ const SignUp = ({navigation}) => {
                   style={user.input}
                   placeholder="Mobile Number | فون نمبر"
                   placeholderTextColor="#a0aec0"
-                  keyboardType="numeric"
+                  ype="numeric"
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  value={value}
+                  // value={value}
                 />
               )}
-              name="phoneNumber"
+              name="phone"
             />
-            {errors.phoneNumber && <Text>{errors.phoneNumber.message}</Text>}
+            {errors.phone && <Text>{errors.phone.message}</Text>}
           </View>
 
           <View style={user.formInput}>
@@ -107,7 +150,7 @@ const SignUp = ({navigation}) => {
               rules={{
                 required: 'Password is required',
                 minLength: {
-                  value: 8,
+                  value: 6,
                   message: 'Password must be at least 8 characters long',
                 },
               }}
@@ -155,10 +198,25 @@ const SignUp = ({navigation}) => {
               <Text>{errors.confirmPassword.message}</Text>
             )}
 
-            {/* <TouchableOpacity onPress={() => setConfirmPassword(!confirmPassword)} style={user.iconContainer}>
-               <Ionicons name={confirmPassword ? 'eye' : 'eye-off'} size={20} color="gray" /> 
+            {/* <TouchableOpacity onPress={() => set WSSC_CODE(! WSSC_CODE)} style={user.iconContainer}>
+               <Ionicons name={ WSSC_CODE ? 'eye' : 'eye-off'} size={20} color="gray" /> 
             </TouchableOpacity>  */}
           </View>
+          {/* Residential Area */}
+          <View>
+          <Dropdown
+            data={resdata}
+            value={value}
+            name="WSSC_CODE"
+            labelField="label"
+            valueField="value"
+            placeholder="Residential Area"
+            onChange={(item) => {
+              setValue(item.value);
+            }}
+          />
+          </View>
+
           <TouchableOpacity
             style={user.submitButton}
             onPress={handleSubmit(onSubmit)}
@@ -177,9 +235,7 @@ const SignUp = ({navigation}) => {
               Click here
             </Text>
           </Text>
-          <Text style={user.additionalTextText}>
-          ہمارے ساتھ رجسٹر کریں
-          </Text>
+          <Text style={user.additionalTextText}>ہمارے ساتھ رجسٹر کریں</Text>
         </View>
       </View>
     </ScrollView>
