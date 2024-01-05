@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView,StyleSheet } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
+import { signInUser } from '../services/citizen/signInApi';
+import HomeScreen from './HomeScreen';
 import { user } from '../../style/styles';
 
 
@@ -19,44 +21,24 @@ const Signin = ({navigation}) => {
       phone: "",
       password: "",
     },
-  })
-  const onSubmit = (data) => {       
- const url =
- 'http://localhost:7000/api/v1/auth/signin'; // Replace with your API endpoint
-const options = {
- method: 'POST',
- headers: {
-   'Content-Type': 'application/json', // Set the content type according to your API requirements
-   // Add any other headers if needed
- },
- body: JSON.stringify(data),
-};
+  }) 
+  const onSubmit = async (data) => {       
+ 
 
     console.log('Form Data:', data);
+    try{
     setLoading(true);
-    fetch(url, options)
-      .then(response => {
-        console.log(response);
-        console.log(response);
-        if (!response.ok) {
-          console.log(response.status);
-          throw new Error('Network response was not ok');
-        }
-        return response.json(); // Parse the JSON from the response
-      })
-      .then(result => {
-        // Handle the result of the request
-        console.log('POST request succeeded with JSON response:', result);
-      })
-      .catch(error => {
-        // Handle errors during the request
-        console.error('There was a problem with the POST request:', error);
-      });
+    const response = await signInUser(data);
+    console.log("Signin Suncessful",response);
+    navigation.navigate('home');
+  }catch(error){
+console.error("signin error",error);
+  }finally{
     setTimeout(() => {
     setLoading(false);
-    // navigation.navigate('signin');
     }, 3000); 
   }
+}
   return (
     <ScrollView contentContainerStyle={user.container}>
       <View style={user.innerContainer}>
