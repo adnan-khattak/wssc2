@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
 import {useForm, Controller} from 'react-hook-form';
+import { signupUser } from '../services/citizen/signUpApi';
 import {user, welcome} from '../../style/styles';
 
 const SignUp = ({navigation}) => {
@@ -40,50 +41,25 @@ const SignUp = ({navigation}) => {
     { value: 'wsscabannu', label: 'Bannu'},
   ];
 
-  const onSubmit = data => {
+  const onSubmit = async (data) => {
     delete data.confirmPassword;
     const formData = { ...data, WSSC_CODE: value };
-    
- const url ='https://fyp-backend-production-27a1.up.railway.app/api/v1/auth/signup'; // Replace with your API endpoint
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json', // Set the content type according to your API requirements
-        // Add any other headers if needed
-      },
-      body: JSON.stringify(formData),
-    };
     console.log('Form Data:', formData);
-    
+    try{
     setLoading(true);
-    fetch(url, options)
-      .then(response => {
-        console.log(response);
-        if (!response.ok) {
-          console.log(response.status);
-          throw new Error('Network response was not ok');
-        }
-        return response.json(); // Parse the JSON from the response
-      })
-      .then(result => {
-        // Handle the result of the request
-        console.log('POST request succeeded with JSON response:', result);
-      })
-      .catch(error => {
-        // Handle errors during the request
-        console.error('There was a problem with the POST request:', error);
-      });
-    reset();
+    const response = await signupUser(formData);
+    console.log("Signup successful:", response);
+    // navigation.navigate('singin');
+  }catch (error){
+   console.error("Signup error",error);
+ } finally{
+  reset();
     setTimeout(() => {
       setLoading(false);
       navigation.navigate('signin');
     }, 3000);
+ }
   };
-
-  // const handleSignUp = () => {
-  //   // Handle the sign-up logic here
-  //   console.log('Signing up with:',name,   phone, password);
-  // };
 
   return (
     <ScrollView contentContainerStyle={user.container}>
