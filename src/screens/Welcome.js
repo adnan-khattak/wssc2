@@ -11,7 +11,7 @@ const Welcome = () => {
     // Set a timeout to navigate to the signin page after 5 seconds
     const timeoutId = setTimeout(() => {
       navigation.navigate('signin'); // Replace 'SignIn' with the name of your signin screen
-    }, 5000);
+    }, 1000);
 
     // Clear the timeout when the component unmounts
     return () => clearTimeout(timeoutId);

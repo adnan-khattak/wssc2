@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext, useState} from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView,StyleSheet } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
+import AuthContext from '../context/Authentication/authContext';
+import { loginUser } from '../services/citizen/signInApi';
 import { user } from '../../style/styles';
+import { useAuth } from '../context/Authentication';
 
 
 const Signin = ({navigation}) => {
+  const { login } = useAuth();
+  console.log("This is context: ", user);
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-
   const {
     control,
     handleSubmit,
@@ -16,47 +18,22 @@ const Signin = ({navigation}) => {
     watch,
   } = useForm({
     defaultValues: {
-      phone: "",
-      password: "",
+      phone: '',
+      password: '',
     },
-  })
-  const onSubmit = (data) => {       
- const url =
- 'http://localhost:7000/api/v1/auth/signin'; // Replace with your API endpoint
-const options = {
- method: 'POST',
- headers: {
-   'Content-Type': 'application/json', // Set the content type according to your API requirements
-   // Add any other headers if needed
- },
- body: JSON.stringify(data),
-};
+  });
 
-    console.log('Form Data:', data);
-    setLoading(true);
-    fetch(url, options)
-      .then(response => {
-        console.log(response);
-        console.log(response);
-        if (!response.ok) {
-          console.log(response.status);
-          throw new Error('Network response was not ok');
+  const onSubmit = (data) => {
+    console.log('Form Data:', data.password,data.phone);
+    login(data)
+      .then(() => {
+        if (!loading) {
+          navigation.navigate('home');
         }
-        return response.json(); // Parse the JSON from the response
-      })
-      .then(result => {
-        // Handle the result of the request
-        console.log('POST request succeeded with JSON response:', result);
-      })
-      .catch(error => {
-        // Handle errors during the request
-        console.error('There was a problem with the POST request:', error);
       });
-    setTimeout(() => {
-    setLoading(false);
-    // navigation.navigate('signin');
-    }, 3000); 
-  }
+  };
+  
+  
   return (
     <ScrollView contentContainerStyle={user.container}>
       <View style={user.innerContainer}>

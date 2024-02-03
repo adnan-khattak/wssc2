@@ -21,7 +21,7 @@ const RecievedComplaint = ({navigation}) => {
 
   return (
     <ScrollView>
-        <Navbar />
+        {/* <Navbar /> */}
         {/* <ComplaintType navigation={navigation} /> */}
       <View style={Pending.container}>
         {complaintDataArray.map((ComplaintData, index) => (

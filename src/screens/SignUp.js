@@ -9,12 +9,13 @@ import {
 } from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
 import {useForm, Controller} from 'react-hook-form';
+import { useAuth, AuthContext } from '../context/Authentication/AuthProvider';
+import { signupUser } from '../services/citizen/signUpApi';
 import {user, welcome} from '../../style/styles';
 
 const SignUp = ({navigation}) => {
-  const [loading, setLoading] = useState(false);
   const [value, setValue] = useState(null);
-
+  // const {signup, loading} = useContext(AuthContext);
   const {
     control,
     handleSubmit,
@@ -40,50 +41,15 @@ const SignUp = ({navigation}) => {
     { value: 'wsscabannu', label: 'Bannu'},
   ];
 
-  const onSubmit = data => {
-    delete data.confirmPassword;
-    const formData = { ...data, WSSC_CODE: value };
-    
- const url ='https://fyp-backend-production-27a1.up.railway.app/api/v1/auth/signup'; // Replace with your API endpoint
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json', // Set the content type according to your API requirements
-        // Add any other headers if needed
-      },
-      body: JSON.stringify(formData),
-    };
-    console.log('Form Data:', formData);
-    
-    setLoading(true);
-    fetch(url, options)
-      .then(response => {
-        console.log(response);
-        if (!response.ok) {
-          console.log(response.status);
-          throw new Error('Network response was not ok');
-        }
-        return response.json(); // Parse the JSON from the response
-      })
-      .then(result => {
-        // Handle the result of the request
-        console.log('POST request succeeded with JSON response:', result);
-      })
-      .catch(error => {
-        // Handle errors during the request
-        console.error('There was a problem with the POST request:', error);
-      });
-    reset();
-    setTimeout(() => {
-      setLoading(false);
-      navigation.navigate('signin');
-    }, 3000);
+  const onSubmit = async (data) => {
+    // delete data.confirmPassword;
+    // const formData = { ...data, WSSC_CODE: value };
+    // console.log("FormData", formData);
+    // await signup(formData);
+    // if (!loading) {
+    //   navigation.navigate('signin');
+    // }
   };
-
-  // const handleSignUp = () => {
-  //   // Handle the sign-up logic here
-  //   console.log('Signing up with:',name,   phone, password);
-  // };
 
   return (
     <ScrollView contentContainerStyle={user.container}>
@@ -241,5 +207,4 @@ const SignUp = ({navigation}) => {
     </ScrollView>
   );
 };
-
 export default SignUp;
