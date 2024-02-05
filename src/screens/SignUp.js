@@ -9,13 +9,14 @@ import {
 } from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
 import {useForm, Controller} from 'react-hook-form';
-import { useAuth, AuthContext } from '../context/Authentication/AuthProvider';
+import { useAuth } from '../context/Authentication';
 import { signupUser } from '../services/citizen/signUpApi';
 import {user, welcome} from '../../style/styles';
 
 const SignUp = ({navigation}) => {
+  const { loading, signup, count } = useAuth();
   const [value, setValue] = useState(null);
-  // const {signup, loading} = useContext(AuthContext);
+  console.log('This is Context:',count);
   const {
     control,
     handleSubmit,
@@ -42,13 +43,17 @@ const SignUp = ({navigation}) => {
   ];
 
   const onSubmit = async (data) => {
-    // delete data.confirmPassword;
-    // const formData = { ...data, WSSC_CODE: value };
-    // console.log("FormData", formData);
-    // await signup(formData);
-    // if (!loading) {
-    //   navigation.navigate('signin');
-    // }
+    delete data.confirmPassword;
+    const formData = { ...data, WSSC_CODE: value };
+    console.log("FormData", formData); 
+    const signupSuccessful = await signup(formData);
+    if (signupSuccessful) {
+      console.log('Account created sucessfuly');
+      navigation.navigate('signin');
+    } else {
+      console.error("Signup failed");
+      // handle signup failure, e.g. show a message to the user
+    }
   };
 
   return (

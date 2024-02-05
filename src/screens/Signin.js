@@ -8,8 +8,8 @@ import { useAuth } from '../context/Authentication';
 
 
 const Signin = ({navigation}) => {
-  const { login } = useAuth();
-  console.log("This is context: ", user);
+  const {login} = useAuth();
+  // console.log("This is context: ", count);
   const [showPassword, setShowPassword] = useState(false);
   const {
     control,
@@ -22,17 +22,15 @@ const Signin = ({navigation}) => {
       password: '',
     },
   });
-
-  const onSubmit = (data) => {
-    console.log('Form Data:', data.password,data.phone);
-    login(data)
-      .then(() => {
-        if (!loading) {
-          navigation.navigate('home');
-        }
-      });
-  };
-  
+  const onSubmit = async (data) => {
+    const loginSuccessful = await login(data);
+    if (loginSuccessful) {
+      navigation.navigate('home');
+    } else {
+      console.error("Login failed");
+      // handle login failure, e.g. show a message to the user
+    }
+  }; 
   
   return (
     <ScrollView contentContainerStyle={user.container}>
