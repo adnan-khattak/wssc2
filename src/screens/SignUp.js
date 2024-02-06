@@ -9,13 +9,16 @@ import {
 } from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
 import {useForm, Controller} from 'react-hook-form';
-import { useAuth, AuthContext } from '../context/Authentication/AuthProvider';
+
+import { useAuth } from '../context/Authentication';
+import { signupUser } from '../services/citizen/signUpApi';
 
 import {user, welcome} from '../../style/styles';
 
 const SignUp = ({navigation}) => {
+  const { loading, signup, count } = useAuth();
   const [value, setValue] = useState(null);
-  // const {signup, loading} = useContext(AuthContext);
+  console.log('This is Context:',count);
   const {
     control,
     handleSubmit,
@@ -44,21 +47,15 @@ const SignUp = ({navigation}) => {
   const onSubmit = async (data) => {
     delete data.confirmPassword;
     const formData = { ...data, WSSC_CODE: value };
-    console.log('Form Data:', formData);
-    try{
-    setLoading(true);
-    const response = await signupUser(formData);
-    console.log("Signup successful:", response);
-    // navigation.navigate('singin');
-  }catch (error){
-   console.error("Signup error",error);
- } finally{
-  reset();
-    setTimeout(() => {
-      setLoading(false);
+    console.log("FormData", formData); 
+    const signupSuccessful = await signup(formData);
+    if (signupSuccessful) {
+      console.log('Account created sucessfuly');
       navigation.navigate('signin');
-    }, 3000);
- }
+    } else {
+      console.error("Signup failed");
+      // handle signup failure, e.g. show a message to the user
+    }
   };
 
   return (
