@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView,StyleSheet } from '
 import { useForm, Controller } from 'react-hook-form';
 import AuthContext from '../context/Authentication/authContext';
 import { loginUser } from '../services/citizen/signInApi';
+import HomeScreen from './HomeScreen';
 import { user } from '../../style/styles';
 import { useAuth } from '../context/Authentication';
 
@@ -21,6 +22,7 @@ const Signin = ({navigation}) => {
       phone: '',
       password: '',
     },
+
   });
   const onSubmit = async (data) => {
     const loginSuccessful = await login(data);

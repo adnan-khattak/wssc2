@@ -9,8 +9,10 @@ import {
 } from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
 import {useForm, Controller} from 'react-hook-form';
+
 import { useAuth } from '../context/Authentication';
 import { signupUser } from '../services/citizen/signUpApi';
+
 import {user, welcome} from '../../style/styles';
 
 const SignUp = ({navigation}) => {
