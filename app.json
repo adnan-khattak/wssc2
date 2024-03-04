@@ -1,4 +1,45 @@
 {
-  "name": "wssc",
-  "displayName": "wssc"
+  "expo": {
+    "name": "cummunity_app",
+    "slug": "cummunity_app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.community-App.myapp"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.anonymous.cummunity_app"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "expo": {
+      "plugins": [
+        "@react-native-firebase/app",
+        "@react-native-firebase/auth",
+        "@notifee/react-native",
+        "expo-secure-store"
+      ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b5a26903-93fb-4d1a-afb8-69491dd82f70"
+      }
+    }
+  }
 }
