@@ -186,6 +186,7 @@ TaskManager.defineTask(BACKGROUND_FETCH_TASK, () => {
       setNewNotificationsCount(0); // Reset new notifications count when viewing all notifications
     }
   };
+  
 
   return (
     user &&
