@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -22,9 +22,14 @@ import { useNavigation } from "@react-navigation/native";
 import { io } from "socket.io-client";
 import { Audio } from "expo-av";
 import * as Notifications from 'expo-notifications';
-import * as BackgroundFetch from 'expo-background-fetch';
-import * as TaskManager from 'expo-task-manager';
-
+import * as Device from 'expo-device';
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true, // Set this to true
+    shouldSetBadge: false,
+  }),
+});
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -33,6 +38,12 @@ const Header = () => {
   const [notifications, setNotifications] = useState([]);
   const [showAllNotifications, setShowAllNotifications] = useState(false);
   const [newNotificationsCount, setNewNotificationsCount] = useState(0);
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const [sound, setSound] = useState(null);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
   const navigation = useNavigation();
   const socket = io("http://172.16.114.21:7000");
   const logOut = () => {
@@ -57,127 +68,51 @@ const Header = () => {
     console.log("Socket disconnected");
   });
   const notificationSound = require('../../assets/livechat-129007.mp3');
-  // const playSound = async () => {
-  //   try {
-  //     const { sound: soundObject, status } = await Audio.Sound.createAsync(notificationSound);
-  //     await soundObject.playAsync();
-  //   } catch (error) {
-  //     console.error('Failed to play notification sound', error);
-  //   }
-  // };
-  const BACKGROUND_FETCH_TASK = 'background-fetch';
-
-TaskManager.defineTask(BACKGROUND_FETCH_TASK, () => {
-  // This is the task that will be executed in the background
-  // Here you can handle your notifications or other background tasks
-
-  console.log('Running background fetch task');
-
-  return BackgroundFetch.Result.NewData;
-});
-  const createTestNotification = async () => {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Test Notification",
-        body: "This is a test notification",
-      },
-      trigger: null,
-    });
-  };
-
+ 
   useEffect(() => {
-    // Request audio permissions
-    (async () => {
-      await Audio.requestPermissionsAsync();
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
-        interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-        playsInSilentModeIOS: true,
-        interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-        shouldDuckAndroid: true,
-        staysActiveInBackground: true,
-        playThroughEarpieceAndroid: true,
-      });
-    })();
-  
-    // Set the notification handler
-    Notifications.setNotificationHandler({
-      handleNotification: async () => ({
-        shouldShowAlert: true,
-        shouldPlaySound: true,
-        shouldSetBadge: false,
-      }),
-    });
-  
-    // Set the notification channel for Android
-    if (Platform.OS === 'android') {
-      Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        sound: 'default',
-      });
-    }
-    // Register the background fetch task
-  (async () => {
-    const status = await BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
-      minimumInterval: 15, // the minimum time interval (in minutes) at which background fetch can occur
-      stopOnTerminate: false, // set to true if you want your task to run only while the app is running
-      startOnBoot: true, // set to true if you want your task to run after the device boots up
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
     });
 
-    if (status === BackgroundFetch.Result.Failed) {
-      console.log('Failed to register background fetch task');
-    }
-  })();
-  
-    // Listen for socket events for complaint status changes
-    socket.on("complaint-status-updated", async (data) => {
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+    // Listen for the "complaint-status-updated" event
+    socket.on('complaint-status-updated', async (data) => {
       const { message } = data.payload;
       setNotifications((prevNotifications) => [...prevNotifications, message]);
       setNewNotificationsCount((prevCount) => prevCount + 1);
-  
-      const notificationSound = require('../../assets/livechat-129007.mp3'); // replace with your audio file path
-      // Play default notification sound
-      try {
-        const { sound: soundObject, status } = await Audio.Sound.createAsync(notificationSound);
-        await soundObject.playAsync();
-      } catch (error) {
-        console.error('Failed to play notification sound', error);
+
+      // Schedule a push notification
+      await schedulePushNotification(message);
+    });
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+      if (sound) {
+        sound.replayAsync();
       }
-  
-      // Display a notification
-      Notifications.scheduleNotificationAsync({
-        content: {
-          title: "Complaint Status Updated",
-          body: message,
-        },
-        trigger: null,
-      });
     });
-  
-    // Subscribe to Expo's foreground events
-    const notificationListener = Notifications.addNotificationReceivedListener(notification => {
-      console.log('Received notification: ', notification);
-      // Increment the notification count when a new notification is received
-      setNewNotificationsCount((prevCount) => prevCount + 1);
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+      if (sound) {
+        sound.replayAsync();
+      }
     });
-  
-    // Emit a mock "complaint-status-updated" event for testing
-    socket.emit("complaint-status-updated", {
-      payload: {
-        message: 'This is a test message',
-      },
-    });
-  // createTestNotification();
-    // Cleanup function
-    return () => {
-      Notifications.removeNotificationSubscription(notificationListener);
-  
-      // Unsubscribe from socket events
-      socket.off("complaint-status-updated");
+
+    const loadSound = async () => {
+      const { sound } = await Audio.Sound.createAsync(require('../../assets/livechat-129007.mp3'));
+      setSound(sound);
     };
-  }, [socket]);
+    loadSound();
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+      socket.disconnect();
+    };
+  }, []);
   
 
   const toggleNotificationView = () => {
@@ -186,6 +121,51 @@ TaskManager.defineTask(BACKGROUND_FETCH_TASK, () => {
       setNewNotificationsCount(0); // Reset new notifications count when viewing all notifications
     }
   };
+  
+  async function schedulePushNotification(message) {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "You've got mail! 📬",
+        body: message,
+        data: { data: 'goes here' },
+        sound: true,
+      },
+      trigger: { seconds: 2 },
+    });
+  }
+  
+  async function registerForPushNotificationsAsync() {
+    let token;
+  
+    if (Platform.OS === 'android') {
+      await Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+  
+    if (Device.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      console.log(token);
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+  
+    return token;
+  }
+
   
 
   return (
@@ -197,7 +177,9 @@ TaskManager.defineTask(BACKGROUND_FETCH_TASK, () => {
           <Text style={Styles.logoName}>{wssc.shortname}</Text>
         </View>
         <View style={Styles.iconContainer}>
-          <TouchableOpacity onPress={toggleNotificationView}>
+          <TouchableOpacity  onPress={async () => {
+          await schedulePushNotification();
+        }}>
             <FontAwesome6 name="bell" size={25} color={COLORS.feedbackColor} />
             {newNotificationsCount > 0 && (
               <View style={Styles.notificationBadge}>
