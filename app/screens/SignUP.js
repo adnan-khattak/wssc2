@@ -87,16 +87,33 @@ const SignUP = () => {
 
     return (
         <View style={Styles.container}>
+            <View style={Styles.innerContainer}>
+            <View style={Styles.logoContainer}>
             <Image
                 style={Styles.logo}
                 source={require('../../assets/Logo.png')}
             />
-            <Text>Your Voice, Our Commitment</Text>
+            </View>
+           <View style={Styles.title}>
+            <Text style={Styles.titleText}>آپ کی آواز، ہمارا عزم</Text>
+            <Text style={Styles.titleText}>Your Voice, Our Commitment</Text>
+          </View>
             <View style={Styles.form}>
+                <View style={Styles.formInput}>
                 <TextInput style={Styles.input} placeholder='User Name | صارف نام' keyboardType='name-phone-pad' onChangeText={(value) => setName(value)} />
+                </View>
+                <View style={Styles.formInput}>
                 <TextInput style={Styles.input} placeholder='Mobile Number | فون نمبر' keyboardType='number-pad' onChangeText={(value) => setPhone(value)} />
+                </View>
+                <View style={Styles.formInput}>
                 <TextInput style={Styles.input} placeholder='Create Password | پاس ورڈ بنائیں' keyboardType='ascii-capable' onChangeText={(value) => setPassword(value)} secureTextEntry />
+                </View>
+                <View style={Styles.formInput}>
                 <TextInput style={Styles.input} placeholder='Confirm Password | تصدیق کریں ' keyboardType='ascii-capable' onChangeText={(value) => setConfirmPass(value)} secureTextEntry />
+                </View>
+               
+               
+                
                 <Dropdown
                     style={[Styles.dropdown, isFocus && { borderColor: COLORS.primary }]}
                     placeholderStyle={Styles.placeholderStyle}
@@ -127,99 +144,142 @@ const SignUP = () => {
                     )}
                 />
 
-            </View>
-            <TouchableOpacity style={Styles.btn} onPress={signUp}>
+            
+            <TouchableOpacity style={Styles.submitButton} onPress={signUp}>
                 {
-                    !loading ? <Text style={Styles.btnText} >Sign Up</Text> : <Feather style={Styles.icon} name="loader" size={28} color='#fff' />
+                    !loading ? <Text style={Styles.buttonText} >Sign Up</Text> : <Feather style={Styles.icon} name="loader" size={28} color='#fff' />
                 }
             </TouchableOpacity>
-            <View style={Styles.linkContainer}>
-                <Text>Already have an account?</Text>
-                <Text style={Styles.link} onPress={() => navigation.navigate("Login")}>Login</Text>
+            </View>
+            <View style={Styles.additionalText}>
+                <Text style={Styles.additionalTextText}>Already have an account?{' '} <Text
+              style={Styles.clickableText}
+              onPress={() => navigation.navigate('Login')}>
+              Click here
+            </Text>
+          </Text>
+          {/* <Text style={Styles.additionalTextText}>ہمارے ساتھ رجسٹر کریں</Text> */}
             </View>
             {/* <OtpModal confirm={confirm} setConfirm={setConfirm} isModal={isModal} setIsModal={setIsModal} phone={phone} /> */}
+            </View>
         </View>
     )
 }
 
 const Styles = StyleSheet.create({
     container: {
+        flexGrow: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+      },
+      innerContainer: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        margin: 12,
-        gap: 24,
-    },
-    logo: {
-        height: 150,
-        width: 150,
-    },
-    form: {
-        width: '100%',
-        gap: 10,
-    },
-    input: {
-        backgroundColor: '#fff',
-        padding: 12,
-        fontSize: 18,
-        borderRadius: 8,
-        ...SHADOWS.small,
-    },
-    btn: {
-        backgroundColor: COLORS.primary,
-        paddingVertical: 12,
-        borderRadius: 8,
-        width: '100%',
+        width: '85%',
+      },logoContainer: {
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    btnText: {
-        color: '#fff',
-        fontSize: 24,
-        fontWeight: '500',
-        textTransform: 'uppercase',
-    },
-    linkContainer: {
-        flexDirection: 'row',
-        gap: 4,
-    },
-    link: {
-        color: 'blue',
-        textDecorationLine: 'underline',
-    },
-    dropdown: {
-        height: 50,
-        borderRadius: 8,
-        paddingHorizontal: 8,
-        backgroundColor: "#fff",
-        ...SHADOWS.small,
-    },
-    icon: {
-        marginRight: 5,
-    },
-    label: {
-        position: 'absolute',
-        backgroundColor: 'white',
-        left: 22,
-        top: 8,
-        zIndex: 999,
-        paddingHorizontal: 8,
-        fontSize: 14,
-    },
-    placeholderStyle: {
-        fontSize: 16,
-    },
-    selectedTextStyle: {
-        fontSize: 16,
-    },
-    iconStyle: {
-        width: 20,
-        height: 20,
-    },
-    inputSearchStyle: {
-        height: 40,
-        fontSize: 16,
-    },
+        marginBottom: 20,
+      },
+      logo: {
+        width: 44,
+        height: 44,
+      },
+        title: {
+          marginLeft: 10,
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        titleText: {
+          fontSize: 14,
+          color: '#718096',
+          fontWeight: '600',
+          textAlign: 'center',
+        },
+        form: {
+              width: '100%',
+            },
+        formInput: {
+              position: 'relative',
+              marginTop: 10,
+              marginBottom: 15,
+            },
+        input: {
+              paddingVertical: 10,
+              paddingHorizontal: 0,
+              fontSize: 16,
+              color: '#000',
+              borderBottomWidth: 2,
+              borderBottomColor: '#cbd5e0',
+              width: '100%',
+            },
+    
+        passwordContainer: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          width: '100%',
+          marginBottom: 15,
+        },  
+        iconContainer: {
+          position: 'absolute',
+          right: 10,
+        }, 
+        submitButton: {
+          width: '100%',
+          backgroundColor: '#4299e1',
+          borderRadius: 5,
+          paddingVertical: 15,
+          marginTop: 20,
+          alignItems: 'center',
+        },
+        buttonText: {
+          fontSize: 16,
+          color: '#fff',
+          fontWeight: '600',
+        },
+         
+        additionalText: {
+          marginTop: 20,
+          alignItems: 'center',
+        },
+        additionalTextText: {
+          fontSize: 14,
+          color: '#4a5568',
+          textAlign: 'center',
+        },
+        clickableText: {
+          color: '#4299e1',
+          textDecorationLine: 'underline',
+        },
+        icon: {
+            marginRight: 5,
+        },
+        label: {
+            position: 'absolute',
+            backgroundColor: 'white',
+            left: 22,
+            top: 8,
+            zIndex: 999,
+            paddingHorizontal: 8,
+            fontSize: 14,
+        },
+        placeholderStyle: {
+            fontSize: 16,
+        },
+        selectedTextStyle: {
+            fontSize: 16,
+        },
+        iconStyle: {
+            width: 20,
+            height: 20,
+        },
+        inputSearchStyle: {
+            height: 40,
+            fontSize: 16,
+        },
 
 })
 
