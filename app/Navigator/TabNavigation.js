@@ -18,7 +18,7 @@ import FileComplaint from '../screens/FileComplaint';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const TabNavigation = () => {
+const TabNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
     const token = useSelector((state) => state.app.token)
 
     return (
@@ -30,7 +30,7 @@ const TabNavigation = () => {
                             name="TabNavigator"
                             component={TabNavigator}
                             options={{
-                                header: (props) => <Header {...props} />,
+                                header: (props) => <Header {...props} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}/>,
                             }}
                         />
                     </Stack.Group>
