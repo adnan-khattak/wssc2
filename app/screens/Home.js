@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 import { COLORS, SHADOWS, SIZES } from "../constants/theme";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -38,6 +39,7 @@ const Home = () => {
     
             const allComplaints = res.data.allComplaints;
             const allComplaintsCount = allComplaints.length; // Calculate the length of the array for count
+            console.log('',allComplaintsCount);
             const InProgress = allComplaints.status = 'InProgress';
             setAllComplaintsCount(allComplaintsCount); // Update state with the count
             setInProgressComplaintsCount(InProgress.length);

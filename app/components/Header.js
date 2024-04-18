@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Platform,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { COLORS, SIZES, SHADOWS } from "../constants/theme";
@@ -31,10 +32,9 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const Header = () => {
+const Header = ({ isMenuOpen, setIsMenuOpen }) => {
   const dispatch = useDispatch();
   const { wssc, user } = useSelector((state) => state.app);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [showAllNotifications, setShowAllNotifications] = useState(false);
   const [newNotificationsCount, setNewNotificationsCount] = useState(0);
@@ -44,8 +44,10 @@ const Header = () => {
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  const navigation = useNavigation();
-  const socket = io("http://172.16.114.21:7000");
+  // const navigation = useNavigation();
+  const socket = io("http://172.16.112.112:7000");
+
+
   const logOut = () => {
     AsyncStorage.removeItem("user");
     AsyncStorage.removeItem("wssc");
@@ -125,7 +127,7 @@ const Header = () => {
   async function schedulePushNotification(message) {
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: "You've got mail! 📬",
+        title: "You've got the mail! 📬",
         body: message,
         data: { data: 'goes here' },
         sound: true,
@@ -165,8 +167,7 @@ const Header = () => {
   
     return token;
   }
-
-  
+ 
 
   return (
     user &&
@@ -213,6 +214,7 @@ const Header = () => {
             )}
           </TouchableOpacity>
         </View>
+        
         {isMenuOpen && (
           <Animatable.View
             animation="fadeIn"
@@ -377,6 +379,11 @@ const Styles = StyleSheet.create({
     borderRadius: 10,
     width: 65,
   },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent black color
+  },
+ 
 });
 
 export default Header;
