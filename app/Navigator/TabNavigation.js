@@ -18,8 +18,8 @@ import FileComplaint from '../screens/FileComplaint';
 import ComplaintDetails from '../screens/supervisor/ComplaintDetails';
 import SupervisorHome from '../screens/supervisor/SupervisorHome';
 import SupervisorProfile from '../screens/supervisor/SupervisorProfile';
-
-
+import OtpModal from '../components/OtpModal';
+import PhoneNumberModal from '../components/PhoneNumberModal';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 

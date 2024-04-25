@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { SetUserData } from '../GlobalState/UserSlice';
 import { Feather } from '@expo/vector-icons';
-import { RH, RW } from '../components/Responsive';
+import { RH, RW, RF, RR } from '../components/Responsive';
 import {SetSupervisorData} from '../GlobalState/SupervisorSlice'
 import { Octicons,Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
@@ -14,6 +14,8 @@ import { FontAwesome6 } from '@expo/vector-icons';
 // export const API = axios.create({ baseURL: 'https://e3ac-2407-d000-503-e0ce-bcd5-ff72-8531-e2a.ngrok-free.app' });
 export const API = axios.create({ baseURL: 'http://172.16.112.112:7000' });
 
+// {supervisor: "phone": "03319395175", "password": "arman"}
+   
 const Login = ({ navigation }) => {
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(false);
@@ -201,39 +203,6 @@ const Login = ({ navigation }) => {
 }
 
 const Styles = StyleSheet.create({
-  scontainer: {
-    marginBottom: 10,
-    alignItems: 'center',
-  },
-  sicons: {
-    marginBottom: 10,
-
-  },
-  activeBtn: {
-    backgroundColor: '#fff',
-    borderColor: '#ccc',
-},
-  inactiveBtn: {
-    backgroundColor: '#272727',
-    borderColor: '#4299e1',
-},
-
-activeBtnText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '300',
-},
-inactiveBtnText: {
-    color: '#000',
-    fontSize: 16,
-    fontWeight: '300',
-},
-  stitle: {
-    fontSize: 20, // Adjust as needed
-    fontWeight: 'bold',
-    color: COLORS.primary,
-    textAlign: 'center',
-  },
   container: {
     flexGrow: 1,
     alignItems: 'center',
@@ -303,6 +272,25 @@ inactiveBtnText: {
     color: '#fff',
     fontWeight: '300',
   },
+  activeBtn: {
+    backgroundColor: '#fff',
+    borderColor: '#ccc',
+},
+  inactiveBtn: {
+    backgroundColor: '#272727',
+    borderColor: '#4299e1',
+},
+
+activeBtnText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '300',
+},
+inactiveBtnText: {
+    color: '#000',
+    fontSize: 16,
+    fontWeight: '300',
+},
   btnContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
