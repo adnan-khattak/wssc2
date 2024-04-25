@@ -11,19 +11,45 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.community-App.myapp"
+      "bundleIdentifier": "com.community-App.myapp",
+      "notification": {
+        "handler": {
+          "handleNotification": {
+            "cummunity_app": {
+              "ios": {
+                "delegateName": "AppDelegate",
+                "requiresForeground": false
+              }
+            }
+          }
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.cummunity_app"
+      "package": "com.anonymous.cummunity_app",
+      "notification": {
+        "handler": {
+          "handleNotification": {
+            "cummunity_app": {
+              "android": {
+                "foregroundService": {
+                  "channelName": "background",
+                  "parameters": {
+                    "timeInterval": 3600
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
