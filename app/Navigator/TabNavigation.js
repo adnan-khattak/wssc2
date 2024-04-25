@@ -9,17 +9,23 @@ import Login from '../screens/Login';
 import Profile from '../screens/Profile';
 import { Ionicons } from '@expo/vector-icons';
 import Header from '../components/Header';
+import SupervisorHeader from '../components/supervisor/SupervisorHeader';
 import SignUP from '../screens/SignUP';
 import { COLORS } from '../constants/theme';
 import SingleComplaint from '../screens/SingleComplaint';
 import { useSelector } from 'react-redux';
 import FileComplaint from '../screens/FileComplaint';
+import ComplaintDetails from '../screens/supervisor/ComplaintDetails';
+import SupervisorHome from '../screens/supervisor/SupervisorHome';
+import SupervisorProfile from '../screens/supervisor/SupervisorProfile';
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const TabNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
+const TabNavigation = () => {
     const token = useSelector((state) => state.app.token)
+    const supervisorToken = useSelector((state) => state.supervisor.supervisorToken)
 
     return (
         <NavigationContainer>
@@ -30,9 +36,37 @@ const TabNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
                             name="TabNavigator"
                             component={TabNavigator}
                             options={{
-                                header: (props) => <Header {...props} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}/>,
+                                header: (props) => <Header {...props} />,
                             }}
                         />
+                    </Stack.Group>
+                ) : (
+                    <>
+                    {supervisorToken ? (
+                    <Stack.Group>
+                        {/* <> */}
+                        <Stack.Screen
+                        name="supervisorHome"
+                        component={SupervisorHome}
+                        options={{
+                            header: (props) => <SupervisorHeader {...props} />,
+                        }}
+                        />
+                        <Stack.Screen
+                        name="complaintDetails"
+                        component={ComplaintDetails}
+                        options={{
+                            header: (props) => <SupervisorHeader {...props} />,
+                        }}
+                        />
+                        <Stack.Screen
+                        name="supervisorProfile"
+                        component={SupervisorProfile}
+                        options={{
+                            header: (props) => <SupervisorHeader {...props} />,
+                        }}
+                        />
+                        {/* </> */}
                     </Stack.Group>
                 ) : (
                     <Stack.Group>
@@ -47,7 +81,8 @@ const TabNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
                             options={{ headerShown: false }}
                         />
                     </Stack.Group>
-
+                )}
+                    </>
                 )}
             </Stack.Navigator>
         </NavigationContainer>
@@ -77,7 +112,7 @@ const TabNavigator = () => {
                     paddingBottom: 10,
                 },
             })}
-            tabBarOptions={{
+            tabBarOption={{
                 activeTintColor: COLORS.primary,
                 inactiveTintColor: 'gray',
             }}

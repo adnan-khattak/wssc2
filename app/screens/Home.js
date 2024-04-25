@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API } from "./Login";
+import { ScrollView } from "react-native-gesture-handler";
 
 
 
@@ -22,7 +23,6 @@ const Home = () => {
     const navigation = useNavigation();
     const [allComplaintsCount, setAllComplaintsCount] = useState(0);
     const [inprogressComplaintsCount, setInProgressComplaintsCount] = useState(0);
-  
     useEffect(() => {
       const fetchComplaintsCount = async () => {
         navigation.addListener("focus", async () => {

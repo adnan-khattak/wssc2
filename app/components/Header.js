@@ -32,7 +32,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const Header = ({ isMenuOpen, setIsMenuOpen }) => {
+const Header = () => {
   const dispatch = useDispatch();
   const { wssc, user } = useSelector((state) => state.app);
   const [notifications, setNotifications] = useState([]);
@@ -41,10 +41,11 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
   const [sound, setSound] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   const socket = io("http://172.16.112.112:7000");
 
 
@@ -69,105 +70,81 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
   socket.on("disconnect", () => {
     console.log("Socket disconnected");
   });
-  const notificationSound = require('../../assets/livechat-129007.mp3');
- 
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
-
+      setNotifications(prevNotifications => [...prevNotifications, notification.request.content.body]);
+      setNewNotificationsCount(prevCount => prevCount + 1);
+    });  
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       console.log(response);
     });
+  
     // Listen for the "complaint-status-updated" event
-    socket.on('complaint-status-updated', async (data) => {
+    socket.on('complaint-status-updated', async data => {
       const { message } = data.payload;
-      setNotifications((prevNotifications) => [...prevNotifications, message]);
-      setNewNotificationsCount((prevCount) => prevCount + 1);
+      setNotifications(prevNotifications => [...prevNotifications, message]);
+      setNewNotificationsCount(prevCount => prevCount + 1);
 
+  
       // Schedule a push notification
-      await schedulePushNotification(message);
-    });
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-      if (sound) {
-        sound.replayAsync();
+      try {
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: "You've got mail! 📬",
+            body: message,
+            data: { data: 'goes here' },
+            sound: true,
+          },
+          trigger: { seconds: 2 },
+        });
+      } catch (error) {
+        console.error('Error scheduling push notification:', error);
       }
     });
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-      if (sound) {
-        sound.replayAsync();
-      }
-    });
-
-    const loadSound = async () => {
-      const { sound } = await Audio.Sound.createAsync(require('../../assets/livechat-129007.mp3'));
-      setSound(sound);
-    };
-    loadSound();
     return () => {
+      // Cleanup: Remove notification subscriptions and disconnect socket
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
-      socket.disconnect();
+      socket.current.disconnect();
     };
   }, []);
   
+  const registerForPushNotificationsAsync = async () => {
+    let token = null; // Initialize token
 
-  const toggleNotificationView = () => {
-    setShowAllNotifications(!showAllNotifications);
-    if (!showAllNotifications) {
-      setNewNotificationsCount(0); // Reset new notifications count when viewing all notifications
-    }
-  };
-  
-  async function schedulePushNotification(message) {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "You've got the mail! 📬",
-        body: message,
-        data: { data: 'goes here' },
-        sound: true,
-      },
-      trigger: { seconds: 2 },
-    });
-  }
-  
-  async function registerForPushNotificationsAsync() {
-    let token;
-  
-    if (Platform.OS === 'android') {
-      await Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      });
-    }
-  
-    if (Device.isDevice) {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
+    try {
+      if (Platform.OS === 'android') {
+        await Notifications.setNotificationChannelAsync('default', {
+          name: 'default',
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+          lightColor: '#FF231F7C',
+        });
       }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
-        return;
+
+      if (Platform.OS !== 'web') {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+          const { status } = await Notifications.requestPermissionsAsync();
+          finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+          throw new Error('Failed to get push token for push notification!');
+        }
+        token = (await Notifications.getExpoPushTokenAsync()).data;
+        console.log(token); // Log the token
+      } else {
+        throw new Error('Must use physical device for Push Notifications');
       }
-      token = (await Notifications.getExpoPushTokenAsync()).data;
-      console.log(token);
-    } else {
-      alert('Must use physical device for Push Notifications');
+    } catch (error) {
+      console.error(error); // Log the error
     }
-  
+
     return token;
-  }
- 
+  };
 
   return (
     user &&
@@ -178,9 +155,8 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
           <Text style={Styles.logoName}>{wssc.shortname}</Text>
         </View>
         <View style={Styles.iconContainer}>
-          <TouchableOpacity  onPress={async () => {
-          await schedulePushNotification();
-        }}>
+        <View style={Styles.iconContainer}>
+          <TouchableOpacity onPress={() => setShowAllNotifications(prev => !prev)}>
             <FontAwesome6 name="bell" size={25} color={COLORS.feedbackColor} />
             {newNotificationsCount > 0 && (
               <View style={Styles.notificationBadge}>
@@ -190,8 +166,7 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
               </View>
             )}
           </TouchableOpacity>
-          {showAllNotifications ? (
-            // Render all notifications
+          {showAllNotifications && (
             <View style={Styles.notificationContainer}>
               <ScrollView contentContainerStyle={Styles.notificationContent}>
                 {notifications.map((notification, index) => (
@@ -201,7 +176,8 @@ const Header = ({ isMenuOpen, setIsMenuOpen }) => {
                 ))}
               </ScrollView>
             </View>
-          ) : null}
+          )}
+        </View>
           <TouchableOpacity onPress={() => setIsMenuOpen(!isMenuOpen)}>
             {user.profile_image ? (
               <Image style={Styles.img} source={{ uri: user.profile_image }} />

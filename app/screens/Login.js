@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert, ToastAndroid, KeyboardAvoidingView } from 'react-native';
 import { COLORS, SHADOWS } from '../constants/theme';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,7 +7,9 @@ import { useDispatch } from 'react-redux';
 import { SetUserData } from '../GlobalState/UserSlice';
 import { Feather } from '@expo/vector-icons';
 import { RH, RW } from '../components/Responsive';
-
+import {SetSupervisorData} from '../GlobalState/SupervisorSlice'
+import { Octicons,Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome6 } from '@expo/vector-icons';
 
 // export const API = axios.create({ baseURL: 'https://e3ac-2407-d000-503-e0ce-bcd5-ff72-8531-e2a.ngrok-free.app' });
 export const API = axios.create({ baseURL: 'http://172.16.112.112:7000' });
@@ -17,62 +19,122 @@ const Login = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const [phone, setPhone] = useState();
     const [password, setPassword] = useState('');
+    const [supervisor,setSupervisor] = useState(false)
 
     const logIn = async () => {
-        if (phone == '' || password == '') {
-            return;
-        } else {
-            // api call
-            setLoading(true)
-            try {
-                const res = await API.post('/api/v1/auth/signin', { phone, password });
-                await AsyncStorage.setItem('user', JSON.stringify(res.data.user));
-                await AsyncStorage.setItem('wssc', JSON.stringify(res.data.WSSC));
-                await AsyncStorage.setItem('token', JSON.stringify(res.data.token));
-                dispatch(SetUserData({ user: res.data.user, wssc: res.data.WSSC, token: res.data.token }))
-                setLoading(false);
-                ToastAndroid.showWithGravity(
-                    'Welcome to the app 🎉',
-                    ToastAndroid.SHORT,
-                    ToastAndroid.CENTER,
-                );
-
-
-            } catch (error) {
-                // Alert.alert('Success', `${error}`);
-                setLoading(false)
-                if (error.response) {
-                    // ToastAndroid.showWithGravity(
-                    //     `${error}`,
-                    //     ToastAndroid.SHORT,
-                    //     ToastAndroid.CENTER,
-                    // );
-
-                    if (error.response.status == 404) {
-                        ToastAndroid.showWithGravity(
-                            'User not found 😔',
-                            ToastAndroid.SHORT,
-                            ToastAndroid.CENTER,
-                        );
-                    } else if (error.response.status == 400) {
-                        ToastAndroid.showWithGravity(
-                            'Incorrect phone or password',
-                            ToastAndroid.SHORT,
-                            ToastAndroid.CENTER,
-                        );
-                    } else {
-                        ToastAndroid.showWithGravity(
-                            'Something went wrong 😟',
-                            ToastAndroid.SHORT,
-                            ToastAndroid.CENTER,
-                        );
-                    }
-                }
-            }
-
-
-        }
-    }
+      if (!supervisor) {
+          if (phone == '' || password == '') {
+              return;
+          } else {
+              // api call
+              setLoading(true)
+              try {
+                  const res = await API.post('/api/v1/auth/signin', { phone, password });
+                  await AsyncStorage.setItem('user', JSON.stringify(res.data.user));
+                  await AsyncStorage.setItem('wssc', JSON.stringify(res.data.WSSC));
+                  await AsyncStorage.setItem('token', JSON.stringify(res.data.token));
+                  console.log(res.data);
+                  dispatch(SetUserData({ user: res.data.user, wssc: res.data.WSSC, token: res.data.token }))
+                  setLoading(false);
+                  ToastAndroid.showWithGravity(
+                      'Welcome to the app 🎉',
+                      ToastAndroid.SHORT,
+                      ToastAndroid.CENTER,
+                  );
+  
+  
+              } catch (error) {
+                  // Alert.alert('Success', `${error}`);
+                  setLoading(false)
+                  if (error.response) {
+                      // ToastAndroid.showWithGravity(
+                      //     `${error}`,
+                      //     ToastAndroid.SHORT,
+                      //     ToastAndroid.CENTER,
+                      // );
+  
+                      if (error.response.status == 404) {
+                          ToastAndroid.showWithGravity(
+                              'User not found 😔',
+                              ToastAndroid.SHORT,
+                              ToastAndroid.CENTER,
+                          );
+                      } else if (error.response.status == 400) {
+                          ToastAndroid.showWithGravity(
+                              'Incorrect phone or password',
+                              ToastAndroid.SHORT,
+                              ToastAndroid.CENTER,
+                          );
+                      } else {
+                          ToastAndroid.showWithGravity(
+                              'Something went wrong 😟',
+                              ToastAndroid.SHORT,
+                              ToastAndroid.CENTER,
+                          );
+                      }
+                  }
+              }
+  
+  
+          }
+      } else {
+          if (phone == '' || password == '') {
+              return;
+          } else {
+              // api call
+              setLoading(true)
+              try {
+                  const res = await API.post('/api/v1/supervisors/signin', { phone, password });
+                  await AsyncStorage.setItem('supervisor', JSON.stringify(res.data.supervisor));
+                  await AsyncStorage.setItem('swssc', JSON.stringify(res.data.WSSC));
+                  await AsyncStorage.setItem('stoken', JSON.stringify(res.data.supervisorToken));
+                  console.log(res.data);
+                  dispatch(SetSupervisorData({ supervisor: res.data.supervisor, WSSC: res.data.WSSC, supervisorToken: res.data.supervisorToken }))
+                  setLoading(false);
+                  ToastAndroid.showWithGravity(
+                      'Welcome to the app 🎉',
+                      ToastAndroid.SHORT,
+                      ToastAndroid.CENTER,
+                  );
+  
+  
+              } catch (error) {
+                  // Alert.alert('Success', `${error}`);
+                  setLoading(false)
+                  if (error.response) {
+                      // ToastAndroid.showWithGravity(
+                      //     `${error}`,
+                      //     ToastAndroid.SHORT,
+                      //     ToastAndroid.CENTER,
+                      // );
+  
+                      if (error.response.status == 404) {
+                          ToastAndroid.showWithGravity(
+                              'User not found 😔',
+                              ToastAndroid.SHORT,
+                              ToastAndroid.CENTER,
+                          );
+                      } else if (error.response.status == 400) {
+                          ToastAndroid.showWithGravity(
+                              'Incorrect phone or password',
+                              ToastAndroid.SHORT,
+                              ToastAndroid.CENTER,
+                          );
+                      } else {
+                          ToastAndroid.showWithGravity(
+                              'Something went wrong 😟',
+                              ToastAndroid.SHORT,
+                              ToastAndroid.CENTER,
+                          );
+                      }
+                  }
+              }
+  
+  
+          }
+      }
+      
+  }
 
     return (
         <View style={Styles.container}>
@@ -86,7 +148,6 @@ const Login = ({ navigation }) => {
             <View style={Styles.title}>
             <Text style={Styles.titleText}>Your Voice, Our Commitment</Text>
             </View>
-
             <View style={Styles.form}>
                 <View style={Styles.formInput}>
                 <TextInput style={Styles.input} placeholder='Mobile Number | فون نمبر' keyboardType='number-pad' onChangeText={(value) => setPhone(value)} />
@@ -101,21 +162,78 @@ const Login = ({ navigation }) => {
                     !loading ? <Text style={Styles.buttonText} >Login</Text> : <Feather style={Styles.icon} name="loader" size={28} color='#fff' />
                 }
             </TouchableOpacity>
-            <View style={Styles.additionalText}>
-                <Text style={Styles.additionalTextText}>Create an account{' '} <Text
-              style={Styles.clickableText}
-              onPress={() => navigation.navigate('SignUp')}>
-              Click here
+            {/* Button for Supervisor */}
+           <KeyboardAvoidingView style={Styles.btnContainer} behavior="padding">
+           <TouchableOpacity style={[Styles.btn, supervisor ? Styles.inactiveBtn : Styles.activeBtn]} onPress={() => setSupervisor(true)}>
+                    <Text style={[Styles.btnText, supervisor ? Styles.activeBtnText : Styles.inactiveBtnText]}>Supervisor</Text>
+                </TouchableOpacity>
+
+                {/* Button for Citizen */}
+                <TouchableOpacity style={[Styles.btn, !supervisor ? Styles.inactiveBtn : Styles.activeBtn]} onPress={() => setSupervisor(false)}>
+                    <Text style={[Styles.btnText, !supervisor ? Styles.activeBtnText : Styles.inactiveBtnText]}>{'   '} Citizen {'   '}</Text>
+                </TouchableOpacity>
+           </KeyboardAvoidingView>
+        
+        {/* Additional Text */}
+        {!supervisor ? (
+    <View style={Styles.additionalText}>
+        <Text style={Styles.additionalTextText}>
+            Create an account{' '}
+            <Text
+                style={Styles.clickableText}
+                onPress={() => navigation.navigate('SignUp')}>
+                Click here
             </Text>
-          </Text>
-          <Text style={Styles.additionalTextText}>ہمارے ساتھ رجسٹر کریں</Text>
-            </View>
-        </View>
+        </Text>
+        <Text style={Styles.additionalTextText}>ہمارے ساتھ رجسٹر کریں</Text>
+    </View>
+) : (
+    <View style={Styles.additionalText}>
+        <Text style={Styles.additionalTextText}>
+            Login here{' '}
+        </Text>
+        <Text style={Styles.additionalTextText}>ہمارے ساتھ لاگ ان کریں</Text>
+    </View>
+)}
+ </View>
         </View>
     )
 }
 
 const Styles = StyleSheet.create({
+  scontainer: {
+    marginBottom: 10,
+    alignItems: 'center',
+  },
+  sicons: {
+    marginBottom: 10,
+
+  },
+  activeBtn: {
+    backgroundColor: '#fff',
+    borderColor: '#ccc',
+},
+  inactiveBtn: {
+    backgroundColor: '#272727',
+    borderColor: '#4299e1',
+},
+
+activeBtnText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '300',
+},
+inactiveBtnText: {
+    color: '#000',
+    fontSize: 16,
+    fontWeight: '300',
+},
+  stitle: {
+    fontSize: 20, // Adjust as needed
+    fontWeight: 'bold',
+    color: COLORS.primary,
+    textAlign: 'center',
+  },
   container: {
     flexGrow: 1,
     alignItems: 'center',
@@ -135,8 +253,8 @@ const Styles = StyleSheet.create({
     marginBottom: 20,
   },
   logo: {
-    width: RW(10), // Updated width using RW
-    height: RW(10), // Updated height using RW
+    width: RW(30), // Updated width using RW
+    height: RW(30), // Updated height using RW
   },
   title: {
     marginLeft: 10,
@@ -144,7 +262,7 @@ const Styles = StyleSheet.create({
     justifyContent: 'center',
   },
   titleText: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#718096',
     fontWeight: '600',
     textAlign: 'center',
@@ -168,17 +286,51 @@ const Styles = StyleSheet.create({
   },
   submitButton: {
     width: '100%',
-    backgroundColor: '#4299e1',
-    borderRadius: 5,
+    backgroundColor: '#272727',
+    borderRadius: 40,
     paddingVertical: 15,
-    marginTop: 20,
+    marginTop: 10,
     alignItems: 'center',
-  },
+    shadowColor: 'blue', // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // Shadow offset
+    shadowOpacity: 3, // Shadow opacity
+    shadowRadius: 3, // Shadow radius
+    elevation: 10, // Android shadow elevation
+},
+
   buttonText: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#fff',
-    fontWeight: '600',
+    fontWeight: '300',
   },
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    position: 'fixed',
+    bottom: -100,
+    width: '100%',
+    paddingHorizontal: 20,
+},
+btn: {
+  backgroundColor: COLORS.primary,
+  paddingVertical: 8,
+  paddingHorizontal: 16,
+  borderRadius: 18,
+  alignItems: 'center',
+  justifyContent: 'center',
+  shadowColor: 'blue',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.3,
+  shadowRadius: 3,
+  elevation: 7,
+},
+btnText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '500',
+    // textTransform: 'uppercase',
+},
+
   linkContainer: {
     flexDirection: 'row',
     gap: 4,
@@ -188,7 +340,7 @@ const Styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   additionalText: {
-    marginTop: 20,
+    marginTop: 10,
     alignItems: 'center',
   },
   additionalTextText: {

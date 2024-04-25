@@ -109,7 +109,7 @@ const uploadPreset = 'xguxdutu';
     body: formData,
   });
   const data = await response.json();
-  return data; // Returns the upload data containing the Cloudinary URL
+  return { secure_url: data.secure_url, public_id: data.public_id}; // Returns the upload data containing the Cloudinary URL
 };
   const uploadFile1 = async (file) => {
     const formData = new FormData();
@@ -120,10 +120,11 @@ const uploadPreset = 'xguxdutu';
     body: formData,
   });
   const data = await response.json();
-  return data; // Returns the upload data containing the Cloudinary URL
+  return  {secure_url: data.secure_url, public_id: data.public_id}; // Returns the upload data containing the Cloudinary URL
 };
 const handleImagePress = () => setIsZoomed(true);
 const closeModal = () => setIsZoomed(false);
+
   const removeImage = () => {
     setImageUri(null);
   };

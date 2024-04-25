@@ -7,6 +7,7 @@ import { COLORS, SHADOWS } from '../constants/theme';
 import { Feather } from '@expo/vector-icons';
 import { API } from './Login';
 import OtpModal from '../components/OtpModal';
+import { RH, RW } from '../components/Responsive';
 
 const SignUP = () => {
     const navigation = useNavigation();
@@ -185,8 +186,8 @@ const Styles = StyleSheet.create({
         marginBottom: 20,
       },
       logo: {
-        width: 44,
-        height: 44,
+        width: RW(30), // Updated width using RW
+        height: RW(30), // Updated height using RW
       },
         title: {
           marginLeft: 10,
@@ -229,16 +230,21 @@ const Styles = StyleSheet.create({
         }, 
         submitButton: {
           width: '100%',
-          backgroundColor: '#4299e1',
-          borderRadius: 5,
+          backgroundColor: '#272727',
+          borderRadius: 40,
           paddingVertical: 15,
-          marginTop: 20,
+          marginTop: 10,
           alignItems: 'center',
-        },
+          shadowColor: 'blue', // Shadow color
+          shadowOffset: { width: 0, height: 2 }, // Shadow offset
+          shadowOpacity: 3, // Shadow opacity
+          shadowRadius: 3, // Shadow radius
+          elevation: 10, // Android shadow elevation
+      },
         buttonText: {
-          fontSize: 16,
+          fontSize: 18,
           color: '#fff',
-          fontWeight: '600',
+          fontWeight: '300',
         },
          
         additionalText: {
