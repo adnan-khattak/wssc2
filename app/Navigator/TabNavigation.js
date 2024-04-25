@@ -23,7 +23,7 @@ import SupervisorProfile from '../screens/supervisor/SupervisorProfile';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const TabNavigation = () => {
+const TabNavigation = ({isMenuOpen, setIsMenuOpen}) => {
     const token = useSelector((state) => state.app.token)
     const supervisorToken = useSelector((state) => state.supervisor.supervisorToken)
 
@@ -36,7 +36,7 @@ const TabNavigation = () => {
                             name="TabNavigator"
                             component={TabNavigator}
                             options={{
-                                header: (props) => <Header {...props} />,
+                                header: (props) => <Header {...props} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}/>
                             }}
                         />
                     </Stack.Group>
@@ -49,21 +49,21 @@ const TabNavigation = () => {
                         name="supervisorHome"
                         component={SupervisorHome}
                         options={{
-                            header: (props) => <SupervisorHeader {...props} />,
+                            header: (props) => <SupervisorHeader {...props} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}/>,
                         }}
                         />
                         <Stack.Screen
                         name="complaintDetails"
                         component={ComplaintDetails}
                         options={{
-                            header: (props) => <SupervisorHeader {...props} />,
+                            header: (props) => <SupervisorHeader {...props}/>,
                         }}
                         />
                         <Stack.Screen
                         name="supervisorProfile"
                         component={SupervisorProfile}
                         options={{
-                            header: (props) => <SupervisorHeader {...props} />,
+                            header: (props) => <SupervisorHeader {...props}/>,
                         }}
                         />
                         {/* </> */}

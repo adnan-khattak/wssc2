@@ -32,7 +32,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const Header = () => {
+const Header = ({isMenuOpen, setIsMenuOpen}) => {
   const dispatch = useDispatch();
   const { wssc, user } = useSelector((state) => state.app);
   const [notifications, setNotifications] = useState([]);
@@ -41,7 +41,7 @@ const Header = () => {
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
   const [sound, setSound] = useState(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // const [isMenuOpen, setIsMenuOpen] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
 
