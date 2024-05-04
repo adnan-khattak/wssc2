@@ -16,8 +16,8 @@ import { useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API } from "./Login";
 import { ScrollView } from "react-native-gesture-handler";
-
-
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faMugSaucer } from '@fortawesome/free-solid-svg-icons/faMugSaucer'
 
 const Home = () => {
     const navigation = useNavigation();
