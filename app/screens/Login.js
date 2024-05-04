@@ -12,7 +12,7 @@ import { Octicons,Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
 
 // export const API = axios.create({ baseURL: 'https://e3ac-2407-d000-503-e0ce-bcd5-ff72-8531-e2a.ngrok-free.app' });
-export const API = axios.create({ baseURL: 'http://172.16.112.112:7000' });
+export const API = axios.create({ baseURL: 'http://172.16.115.173:7000' });
 
 // {supervisor: "phone": "03319395175", "password": "arman"}
    
