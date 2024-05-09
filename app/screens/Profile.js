@@ -11,7 +11,7 @@ import { API } from './Login';
 import { UpdateUserData } from '../GlobalState/UserSlice';
 import { manipulateAsync } from 'expo-image-manipulator';
 import EditModal from '../components/EditModal';
-
+import { RH, RW, RR, RF } from '../components/Responsive';
 
 
 const Profile = () => {
@@ -135,7 +135,7 @@ const Profile = () => {
             <View style={Styles.container}>
                 <BreadCrumb screen='Home' title='Profile' />
 
-                <Avatar uri={image} user={user} setIsModal={setIsModal} update={update} />
+                <Avatar uri={image} user={user} setIsModal={setIsModal} update={update}/>
 
                 <View style={Styles.infoContainer}>
                     <Text style={Styles.infoLabel}>Name</Text>
@@ -198,12 +198,12 @@ const Profile = () => {
 }
 const Styles = StyleSheet.create({
     container: {
-        margin: 12,
+        margin: RW(2),
     },
     infoContainer: {
-        marginHorizontal: 44,
+        marginHorizontal: RW(12),
         gap: 4,
-        marginTop: 14,
+        marginTop: RH(1.5),
     },
     infoLabel: {
         fontSize: 14,
@@ -232,4 +232,4 @@ const Styles = StyleSheet.create({
     }
 })
 
-export default Profile
+export default Profile;

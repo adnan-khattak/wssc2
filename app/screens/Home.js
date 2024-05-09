@@ -16,8 +16,7 @@ import { useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API } from "./Login";
 import { ScrollView } from "react-native-gesture-handler";
-
-
+import { RH, RW, RF, RR } from '../components/Responsive';
 
 const Home = () => {
     const navigation = useNavigation();
@@ -71,6 +70,7 @@ const Home = () => {
           size={35}
           color={COLORS.primary}
         />
+         {/* <FontAwesomeIcon icon={faMugSaucer} /> */}
       </View>
       <Text style={Styles.heading}>Please choose complaint type</Text>
       <FlatList
@@ -83,7 +83,7 @@ const Home = () => {
         contentContainerStyle={{
           columnGap: 50,
           alignItems: "start",
-          marginVertical: 20,
+          marginVertical: RH(1.5),
           flexGrow: 1,
         }}
       />
@@ -93,10 +93,10 @@ const Home = () => {
 
 const Styles = StyleSheet.create({
   container: {
-    margin: 12,
+    margin: RH(0.9),
   },
   tabsContainer: {
-    marginTop: 4,
+    marginTop: RH(0.89),
     flexDirection: "row",
     borderRadius: 30,
     backgroundColor: "white",
@@ -127,7 +127,7 @@ const Styles = StyleSheet.create({
     borderWidth: 1,
   },
   heading: {
-    marginTop: 20,
+    marginTop: RH(1.5),
     fontSize: SIZES.large,
     fontWeight: "500",
     color: COLORS.gray,

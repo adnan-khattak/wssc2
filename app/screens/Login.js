@@ -255,7 +255,7 @@ const Styles = StyleSheet.create({
   },
   submitButton: {
     width: '100%',
-    backgroundColor: '#272727',
+    backgroundColor: '#29a329',
     borderRadius: 40,
     paddingVertical: 15,
     marginTop: 10,
@@ -270,21 +270,21 @@ const Styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: '#fff',
-    fontWeight: '300',
+    fontWeight: '400',
   },
   activeBtn: {
     backgroundColor: '#fff',
     borderColor: '#ccc',
 },
   inactiveBtn: {
-    backgroundColor: '#272727',
+    backgroundColor: '#29a329',
     borderColor: '#4299e1',
 },
 
 activeBtnText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '300',
+    fontWeight: '400',
 },
 inactiveBtnText: {
     color: '#000',

@@ -3,6 +3,7 @@ import { Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-nat
 import { SHADOWS } from '../constants/theme'
 import * as Animatable from 'react-native-animatable'
 import { useNavigation } from '@react-navigation/native';
+import { RH, RW, RF, RR } from './Responsive';
 
 
 const { width } = Dimensions.get('window');
@@ -24,25 +25,25 @@ const ComplaintTypeItem = ({ complaintType, index }) => {
 
 const Styles = StyleSheet.create({
     container: {
-        width: '48%',
-        marginHorizontal: 4,
+        width: RW(44),
+        marginHorizontal: RW(2),
     },
     typeContainer: {
         width: '100%',
         borderRadius: 20,
-        paddingBottom: 10,
-        marginBottom: 20,
+        paddingBottom: RH(1.4),
+        marginBottom: RH(2.0),
         backgroundColor: "#fff",
         ...SHADOWS.medium
     },
     img: {
-        height: 90,
+        height: RH(11.3),
         width: '100%',
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
     },
     text: {
-        marginTop: 10,
+        marginTop: RH(0.589),
         textAlign: 'center'
     },
     centeredItem: {
