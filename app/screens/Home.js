@@ -38,8 +38,8 @@ const Home = () => {
     
             const allComplaints = res.data.allComplaints;
             const allComplaintsCount = allComplaints.length; // Calculate the length of the array for count
-            console.log('',allComplaintsCount);
-            const InProgress = allComplaints.status = 'InProgress';
+            // console.log('',allComplaintsCount);
+            const InProgress = allComplaints.status = 'Completed';
             setAllComplaintsCount(allComplaintsCount); // Update state with the count
             setInProgressComplaintsCount(InProgress.length);
           } catch (error) {

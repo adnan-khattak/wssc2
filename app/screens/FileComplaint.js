@@ -50,8 +50,9 @@ const FileComplaint = ({ route }) => {
       setImageUri(null);
     };
   }, []);
-  const cloudName = 'dgpwe8xy6'; // Replace with your Cloudinary cloud name
-const uploadPreset = 'xguxdutu';
+  const cloudName = 'dvlurxvei'; // Replace with your Cloudinary cloud name
+  const API = '344971619988835'
+const uploadPreset = 'cakoiai6';
   const pickImage = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -104,7 +105,7 @@ const uploadPreset = 'xguxdutu';
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', uploadPreset);
-    const response = await fetch("https://api.cloudinary.com/v1_1/dgpwe8xy6/image/upload", {
+    const response = await fetch("https://api.cloudinary.com/v1_1/dvlurxvei/image/upload", {
     method: 'POST',
     body: formData,
   });
@@ -115,7 +116,7 @@ const uploadPreset = 'xguxdutu';
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', uploadPreset);
-    const response = await fetch("https://api.cloudinary.com/v1_1/dgpwe8xy6/video/upload", {
+    const response = await fetch("https://api.cloudinary.com/v1_1/dvlurxvei/video/upload", {
     method: 'POST',
     body: formData,
   });
@@ -124,13 +125,38 @@ const uploadPreset = 'xguxdutu';
 };
 const handleImagePress = () => setIsZoomed(true);
 const closeModal = () => setIsZoomed(false);
+const deleteFile = async (public_id) => {
+  const response = await fetch(`https://api.cloudinary.com/v1_1/dvlurxvei/image/destroy`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${API}` // replace with your Cloudinary API key
+    },
+    body: JSON.stringify({ public_id })
+  });
 
-  const removeImage = () => {
-    setImageUri(null);
-  };
-  const removeVideo = () =>{
-    setVideoUri(null);
+  const data = await response.json();
+
+  if (data.result === 'ok') {
+    console.log('File deleted successfully');
+  } else {
+    console.log('Failed to delete file');
   }
+
+  return data;
+};
+
+const removeImage = async () => {
+  const { public_id } = await uploadFile(file); // get the public_id when you upload the file
+  await deleteFile(public_id); // delete the file from Cloudinary
+  setImageUri(null); // remove the image URI from your state
+};
+
+const removeVideo = async () => {
+  const { public_id } = await uploadFile1(file); // get the public_id when you upload the file
+  await deleteFile(public_id); // delete the file from Cloudinary
+  setVideoUri(null); // remove the video URI from your state
+};
   const submitComplaint = async () => {
     // if (!imageUri) {
     //   ToastAndroid.showWithGravity(
